@@ -1,0 +1,12 @@
+{
+  "apis": {
+  	"/": {
+  		"title": "@IP",
+  		"name": "{{name}}"
+  	},
+  	"/test": {
+  		"title": "@title"
+  	}
+  },
+  "description": {}
+}
