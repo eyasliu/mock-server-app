@@ -4,7 +4,9 @@ import faker from 'faker'
 const parseMock = body => {
 	let mockParse;
 	try {
-		mockParse = JSON.stringify(mock(JSON.parse(body)))
+		let bodyObj = JSON.parse(body);
+		let isArray = Array.isArray(bodyObj);
+		mockParse = isArray ? JSON.stringify(mock({"array|1-20": bodyObj}).array) : JSON.stringify(mock(JSON.parse(body)))
 	} catch(e) {
 		mockParse = 'ERROR: ' + e.message
 	}
