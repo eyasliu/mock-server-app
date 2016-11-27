@@ -2,14 +2,18 @@ import {mock} from 'mockjs'
 import faker from 'faker'
 
 const parseMock = body => {
-	let fakerParse = faker.fake(body)
-	try{
-		fakerParse = JSON.parse(fakerParse);
-	} catch(e) {}
-	return mock(fakerParse)
+	let mockParse;
+	try {
+		mockParse = JSON.stringify(mock(JSON.parse(body)))
+	} catch(e) {
+		mockParse = 'ERROR: ' + e.message
+	}
+	return faker.fake(mockParse);
 }
 
 export default () => async (context, next) => {
-	context.body = parseMock(context.body)
+	if(context.body){
+		context.body = parseMock(context.body)
+	}
 	await next()
 }

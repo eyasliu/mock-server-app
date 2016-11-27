@@ -1,8 +1,11 @@
 {
   "apis": {
+  	"get /": {
+  		"word|100": ["@cword"]
+  	},
   	"/": {
   		"title": "@IP",
-  		"name": "{{name}}"
+  		"name|200": ["{{name.firstName}}"]
   	},
   	"/test": {
   		"title": "@title"
