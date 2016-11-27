@@ -9,7 +9,14 @@
   	},
   	"/test": {
   		"title": "@title"
-  	}
+  	},
+  	"/projects": [
+  		{
+  			"name": "@title",
+  			"domain": "@domain('com')"
+  		}
+  	]
   },
+  "projects": [],
   "description": {}
 }

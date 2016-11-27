@@ -2,14 +2,15 @@ import koa from 'koa'
 import logger from 'koa-logger'
 import mock from './middleware/mock'
 import api from './middleware/api'
+import admin from './middleware/admin'
+import server from 'koa-static'
 
 const app = new koa()
 
 app.use(logger())
-// app.use(async (context, next) => {
-// 	context.body = '{{name.lastName}} - @title'
-// 	await next()
-// })
+app.use(admin.routes())
+app.use(admin.allowedMethods())
+app.use(server('./client'))
 app.use(api)
 app.use(mock());
 
