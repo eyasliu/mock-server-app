@@ -3,9 +3,6 @@ body {
 	padding: 0;
 	font-family: 'microsoft yahei';
 }
-*{
-	font-family: 'microsoft yahei';
-}
 #app{
 	max-width: 960px;
 	margin: 0 auto;

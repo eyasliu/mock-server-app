@@ -14,6 +14,9 @@ export default {
 			{
         test: /\.js$/,
         loader: 'babel'
+      }, {
+        test: /\.css$/,
+        loader: 'style!css'
       }
 		]
 	}

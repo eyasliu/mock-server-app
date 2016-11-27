@@ -9,10 +9,11 @@ admin.get('/projects', async context => {
 	context.body = [];
 })
 
-admin.get('/projects/:name', async context => {
+admin.get('/projects/:name', async (context, next) => {
 	const {db, apis} = new DB('basic')
 	console.log('admin detail', apis.value())
 	context.body = apis.value()
+
 })
 
 

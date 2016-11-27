@@ -13,7 +13,7 @@
   	"/projects": [
   		{
   			"name": "@title",
-  			"domain": "@domain('com')"
+  			"domain": "@domain('mock.com')"
   		}
   	]
   },
