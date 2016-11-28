@@ -3,6 +3,7 @@ import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card'
 import {List, ListItem} from 'material-ui/List';
 import FlatButton from 'material-ui/FlatButton'
 import FontIcon from 'material-ui/FontIcon'
+import api from './api'
 
 export default class Project extends PureComponent {
 	constructor(props){
@@ -17,6 +18,7 @@ export default class Project extends PureComponent {
 	getProjects(){
 		return fetch('/projects').then(res => res.json())
 	}
+
 	render(){
 		return (
 			<Card>
@@ -31,6 +33,9 @@ export default class Project extends PureComponent {
 				      <ListItem 
 				      	primaryText={item.name} 
 				      	secondaryText={item.domain}
+				      	onClick={e => {
+				      		this.context.changePage('list', item.domain.split('.')[0])
+				      	}}
 				      />
 						))}
 			    </List>
@@ -38,4 +43,7 @@ export default class Project extends PureComponent {
 			</Card>
 		)
 	}
+}
+Project.contextTypes = {
+	changePage: React.PropTypes.func
 }
