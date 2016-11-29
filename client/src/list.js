@@ -6,6 +6,7 @@ import FontIcon from 'material-ui/FontIcon'
 import TextField from 'material-ui/TextField'
 import SelectField from 'material-ui/SelectField'
 import MenuItem from 'material-ui/MenuItem'
+import Snackbar from 'material-ui/Snackbar';
 
 import Dialog from 'material-ui/Dialog'
 
@@ -14,51 +15,125 @@ import CodeMirror from 'react-codemirror'
 import 'codemirror/mode/javascript/javascript'
 import 'codemirror/lib/codemirror.css'
 
+class Model extends PureComponent{
+	constructor(props){
+		super()
+		var parseUrl = (url => {
+				const parse = url.split(' ');
+				return {
+					method: parse.length > 1 ? parse[0] : 'any',
+					path: parse.length > 1 ? parse[1] : parse[0]
+				}
+			})(props.url)
+		this.state = {
+			code: JSON.stringify(props.api, null, 4),
+			message: '',
+			method: parseUrl.method,
+			path: parseUrl.path
+		}
+	}
+	save(){
+		const {url} = this.props
+		let code;
+		try{
+			code = JSON.parse(this.state.code)
+		} catch(e) {
+			this.showMessage('语法错误: ' + e.message)
+			return
+		}
+		api.saveApi(url, code).then(() => {
+			this.props.close()
+		});
 
-
-const Model = props => {
-	return (
-		<Dialog
-			title={props.title}
-			actions={props.actions}
-			modal={false}
-			open={true}
-			onRequestClose={props.close}
-			autoScrollBodyContent={true}
-			bodyStyle={{marginTop: 10}}
-		>
-			<SelectField
-				floatingLabelText="请求方法"
-				value={props.url.method}
-				disabled={!!props.url.path}
+	}
+	remove(){
+		api.removeApi(this.props.url).then(() => {
+			this.props.close()
+		})
+	}
+	updateCode(code){
+		this.setState({code})
+	}
+	showMessage(message){
+		this.setState({message})
+	}
+	render(){
+		const ModelAction = [
+			<FlatButton
+		    label="关闭"
+		    onClick={this.props.close}
+		  />,
+		  <FlatButton
+		    label="提交"
+		    primary
+		    onClick={this.save.bind(this)}
+		  />,
+		  this.props.url ? <FlatButton
+		    label="删除"
+		    secondary
+		    onClick={this.remove.bind(this)}
+		  /> : ''
+		]
+		var parseUrl = (url => {
+				const parse = url.split(' ');
+				return {
+					method: parse.length > 1 ? parse[0] : 'any',
+					path: parse.length > 1 ? parse[1] : parse[0]
+				}
+			})(this.props.url)
+		return (
+			<Dialog
+				title={this.props.title}
+				actions={ModelAction}
+				modal={false}
+				open={true}
+				onRequestClose={this.props.close}
+				autoScrollBodyContent={true}
+				bodyStyle={{marginTop: 10}}
 			>
-				<MenuItem value="any" primaryText="任意" />
-				<MenuItem value="get" primaryText="GET" />
-				<MenuItem value="post" primaryText="POST" />
-				<MenuItem value="put" primaryText="PUT" />
-				<MenuItem value="delete" primaryText="DELETE" />
-				<MenuItem value="options" primaryText="OPTIONS" />
-			</SelectField>
-			<br />
-			<TextField
-				floatingLabelText="接口url"
-				defaultValue={props.url.path}
-				disabled={!!props.url.path}
-			/>
-			{/*<pre className="api-code">
-				{JSON.stringify(props.api, null, 4)}
-			</pre>*/}
-			<CodeMirror
-				value={JSON.stringify(props.api, null, 4)}
-				preserveScrollPosition={true}
-				options={{
-					mode: 'javascript',
-					lineNumbers: true
-				}}
-			>
-			</CodeMirror>
-		</Dialog>
-	)
+				<SelectField
+					floatingLabelText="请求方法"
+					value={this.state.method}
+					disabled={!!this.props.url}
+					onChange={(e, index, value) => this.setState({method: value})}
+				>
+					<MenuItem value="any" primaryText="任意" />
+					<MenuItem value="get" primaryText="GET" />
+					<MenuItem value="post" primaryText="POST" />
+					<MenuItem value="put" primaryText="PUT" />
+					<MenuItem value="delete" primaryText="DELETE" />
+					<MenuItem value="options" primaryText="OPTIONS" />
+				</SelectField>
+				<br />
+				<TextField
+					floatingLabelText="接口url"
+					defaultValue={this.state.path}
+					disabled={!!this.props.url}
+					onChange={e => this.setState({path: e.target.value})}
+				/>
+				{/*<pre className="api-code">
+					{JSON.stringify(props.api, null, 4)}
+				</pre>*/}
+				<CodeMirror
+					ref="editor"
+					value={this.state.code}
+					preserveScrollPosition={true}
+					onChange={this.updateCode.bind(this)}
+					options={{
+						mode: 'javascript',
+						lineNumbers: true
+					}}
+				>
+				</CodeMirror>
+				<Snackbar 
+					open={!!this.state.message}
+					message={this.state.message}
+					onRequestClose={this.showMessage.bind(this, '')}
+					autoHideDuration={3000} />
+				
+			</Dialog>
+		)
+	}
 }
 
 export default class ProjectList extends PureComponent{
@@ -75,29 +150,10 @@ export default class ProjectList extends PureComponent{
 	}
 
 	showDetail(url, data, e){
-		const ModelAction = [
-			<FlatButton
-		    label="关闭"
-		    onClick={this.closeModel.bind(this)}
-		  />,
-		  <FlatButton
-		    label="提交"
-		    primary
-		  />,
-		  data ? <FlatButton
-		    label="删除"
-		    secondary
-		  /> : ''
-		]
-		const parseUrl = url.split(' ');
 		const modelData = {
 			title: "编辑接口数据",
-			url: {
-				method: parseUrl.length > 1 ? parseUrl[0] : 'any',
-				path: parseUrl.length > 1 ? parseUrl[1] : parseUrl[0]
-			},
+			url: url,
 			api: data,
-			actions: ModelAction,
 			close: this.closeModel.bind(this)
 		}
 		this.setState({
@@ -108,12 +164,26 @@ export default class ProjectList extends PureComponent{
 	closeModel(){
 		this.setState({modelOpen: false})
 	}
+	addApi(){
+		this.setState({
+			modelData: {
+				title: '新增接口',
+				url: '',
+				api: {},
+				close: this.closeModel.bind(this)
+			},
+			modelOpen: !this.state.modelOpen
+		})
+	}
 	render(){
 
 		return (
 			<Card>
 				<CardHeader
-		      title={<div><span>云协作</span><FlatButton label="添加新路径" primary={true} /></div>}
+		      title={<div>
+		      	<span>云协作</span>
+		      	<FlatButton onClick={this.addApi.bind(this)} label="添加新路径" primary={true} />
+		      </div>}
 		      style={{borderBottom: '1px solid #eee'}}
 		    />
 		    <CardText>
