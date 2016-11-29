@@ -11,5 +11,6 @@ export default async (context, next) => {
 	if(content){
 		context.body = JSON.stringify(content) || '';
 	}
+	context.set('Content-Type', 'application/json;charset=utf-8')
 	await next();
 }
