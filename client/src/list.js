@@ -33,7 +33,7 @@ class Model extends PureComponent{
 		}
 	}
 	save(){
-		const {url} = this.props
+		const url = (this.state.method == 'any' ? '' : this.state.method + ' ') + this.state.path
 		let code;
 		try{
 			code = JSON.parse(this.state.code)
@@ -43,12 +43,14 @@ class Model extends PureComponent{
 		}
 		api.saveApi(url, code).then(() => {
 			this.props.close()
+			this.props.saveApi(url, code)
 		});
 
 	}
 	remove(){
 		api.removeApi(this.props.url).then(() => {
 			this.props.close()
+			this.props.saveApi(this.props.url, '')
 		})
 	}
 	updateCode(code){
@@ -154,7 +156,8 @@ export default class ProjectList extends PureComponent{
 			title: "编辑接口数据",
 			url: url,
 			api: data,
-			close: this.closeModel.bind(this)
+			close: this.closeModel.bind(this),
+			saveApi: this.saveApi.bind(this)
 		}
 		this.setState({
 			modelData,
@@ -170,10 +173,16 @@ export default class ProjectList extends PureComponent{
 				title: '新增接口',
 				url: '',
 				api: {},
-				close: this.closeModel.bind(this)
+				close: this.closeModel.bind(this),
+				saveApi: this.saveApi.bind(this)
 			},
 			modelOpen: !this.state.modelOpen
 		})
+	}
+	saveApi(url, data){
+		const newApis = Object.assign({}, this.state.apis)
+		newApis[url] = data
+		this.setState({apis: newApis})
 	}
 	render(){
 
@@ -191,7 +200,7 @@ export default class ProjectList extends PureComponent{
 						{Object.keys(this.state.apis).map(item => {
 							const api = this.state.apis[item]
 							return (
-								<ListItem 
+								api && <ListItem 
 					      	primaryText={item} 
 					      	secondaryText={JSON.stringify(api)}
 					      	onClick={this.showDetail.bind(this, item, api)}

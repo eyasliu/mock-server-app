@@ -34939,8 +34939,7 @@
 			value: function save() {
 				var _this2 = this;
 
-				var url = this.props.url;
-
+				var url = (this.state.method == 'any' ? '' : this.state.method + ' ') + this.state.path;
 				var code = void 0;
 				try {
 					code = JSON.parse(this.state.code);
@@ -34950,6 +34949,7 @@
 				}
 				_api2.default.saveApi(url, code).then(function () {
 					_this2.props.close();
+					_this2.props.saveApi(url, code);
 				});
 			}
 		}, {
@@ -34959,6 +34959,7 @@
 
 				_api2.default.removeApi(this.props.url).then(function () {
 					_this3.props.close();
+					_this3.props.saveApi(_this3.props.url, '');
 				});
 			}
 		}, {
@@ -35080,7 +35081,8 @@
 					title: "编辑接口数据",
 					url: url,
 					api: data,
-					close: this.closeModel.bind(this)
+					close: this.closeModel.bind(this),
+					saveApi: this.saveApi.bind(this)
 				};
 				this.setState({
 					modelData: modelData,
@@ -35100,10 +35102,18 @@
 						title: '新增接口',
 						url: '',
 						api: {},
-						close: this.closeModel.bind(this)
+						close: this.closeModel.bind(this),
+						saveApi: this.saveApi.bind(this)
 					},
 					modelOpen: !this.state.modelOpen
 				});
+			}
+		}, {
+			key: 'saveApi',
+			value: function saveApi(url, data) {
+				var newApis = Object.assign({}, this.state.apis);
+				newApis[url] = data;
+				this.setState({ apis: newApis });
 			}
 		}, {
 			key: 'render',
@@ -35134,7 +35144,7 @@
 							null,
 							Object.keys(this.state.apis).map(function (item) {
 								var api = _this6.state.apis[item];
-								return _react2.default.createElement(_List.ListItem, {
+								return api && _react2.default.createElement(_List.ListItem, {
 									primaryText: item,
 									secondaryText: JSON.stringify(api),
 									onClick: _this6.showDetail.bind(_this6, item, api)
@@ -44798,7 +44808,7 @@
 	var baseUrl = location.origin + '/admin';
 
 	var getApis = exports.getApis = function getApis(project) {
-	    return fetch(baseUrl + '/projects').then(function (res) {
+	    return fetch(baseUrl + '/project').then(function (res) {
 	        return res.json();
 	    });
 	};
@@ -44806,6 +44816,9 @@
 	var saveApi = exports.saveApi = function saveApi(url, data) {
 	    return fetch(baseUrl + '/project', {
 	        method: 'POST',
+	        headers: {
+	            'Content-Type': 'application/json'
+	        },
 	        body: JSON.stringify({ data: data, url: url })
 	    }).then(function (res) {
 	        return res.json();
@@ -44815,6 +44828,9 @@
 	var removeApi = exports.removeApi = function removeApi(url) {
 	    return fetch(baseUrl + '/project', {
 	        method: 'DELETE',
+	        headers: {
+	            'Content-Type': 'application/json'
+	        },
 	        body: JSON.stringify({ url: url })
 	    }).then(function (res) {
 	        return res.json();

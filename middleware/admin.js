@@ -1,20 +1,27 @@
 import Router from 'koa-router'
-import DB from './db';
 
 const admin = Router({
 	prefix: '/admin'
 })
 
-admin.get('/projects', async context => {
-	context.body = [];
+admin.get('/project', async context => {
+	const {db} = context;
+	context.body = db.apis.value();
 })
 
-admin.get('/projects/:name', async (context, next) => {
-	const {db, apis} = new DB('basic')
-	console.log('admin detail', apis.value())
-	context.body = apis.value()
-
+admin.post('/project', async (context, next) => {
+	const {request} = context
+	const {db, apis} = context.db
+	const {url, data} = request.body
+	apis.set(url, data).value()
+	context.body = {result: true}
 })
-
+admin.delete('/project', async (context) => {
+	const {request} = context
+	const {db, apis} = context.db
+	const {url} = request.body
+	apis.set(url, undefined).value()
+	context.body = {result: true}
+})
 
 export default admin

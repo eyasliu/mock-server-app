@@ -1,9 +1,7 @@
-import DB from './db';
-import _ from 'lodash'
 
 export default async (context, next) => {
-	const {url, method} = context;
-	const {apis} = new DB(_.first(context.subdomains) || 'basic')
+	const {url, method, db} = context;
+	const {apis} = db
 	let content = apis.get(method.toLowerCase() + ' ' + context.url).value()
 	if(!content){
 		content = apis.get(context.url).value()
