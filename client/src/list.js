@@ -170,7 +170,7 @@ export default class ProjectList extends PureComponent{
 	addApi(){
 		this.setState({
 			modelData: {
-				title: '新增接口',
+				title: '新增模拟接口',
 				url: '',
 				api: {},
 				close: this.closeModel.bind(this),
@@ -184,14 +184,25 @@ export default class ProjectList extends PureComponent{
 		newApis[url] = data
 		this.setState({apis: newApis})
 	}
+	openApi(key, e){
+		e.preventDefault();
+		e.stopPropagation();
+		const parse = key.split(' ')
+		window.open(parse[(parse.length - 1)])
+	}
 	render(){
 
 		return (
 			<Card>
 				<CardHeader
 		      title={<div>
-		      	<span>云协作</span>
-		      	<FlatButton onClick={this.addApi.bind(this)} label="添加新路径" primary={true} />
+		      	<span style={{marginRight: 30}}>模拟接口列表</span>
+		      	<FlatButton onClick={this.addApi.bind(this)} label="添加新接口" primary />
+		      	<FlatButton 
+		      		href="https://github.com/eyasliu/mock-server-app#readme" 
+		      		label="说明文档"
+		      		target="_blank"
+		      		secondary />
 		      </div>}
 		      style={{borderBottom: '1px solid #eee'}}
 		    />
@@ -204,6 +215,7 @@ export default class ProjectList extends PureComponent{
 					      	primaryText={item} 
 					      	secondaryText={JSON.stringify(api)}
 					      	onClick={this.showDetail.bind(this, item, api)}
+					      	rightIcon={<i onClick={this.openApi.bind(this, item)} className="fa fa-link" title="访问接口"></i>}
 					      />
 				      )
 						})}

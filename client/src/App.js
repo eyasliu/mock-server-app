@@ -3,6 +3,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import AppBar from 'material-ui/AppBar'
 
 import List from './List'
+import './style.css'
 
 const Wrap = ({children}) => <MuiThemeProvider>{children}</MuiThemeProvider>
 const Navbar = props => <AppBar title="模拟数据服务" />
@@ -12,7 +13,6 @@ export default class App extends PureComponent {
 		super()	
 	}
 
-	
 	render(){
 		return (
 			<Wrap>
