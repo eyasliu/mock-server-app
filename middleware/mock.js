@@ -1,6 +1,8 @@
 import {mock} from 'mockjs'
 import faker from 'faker'
 
+faker.locale = "zh_CN"
+
 const parseMock = body => {
 	let mockParse;
 	try {
