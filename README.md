@@ -30,6 +30,16 @@ __注意： 代码编辑器中只能写json格式数据__
 
 如：定义的domain为 `mock.example.com`，访问时会自动新建一个项目，以后在使用 `sub.mock.example.com` 访问又会新建一个独立的 `sub` 项目
 
+## 路由
+
+定义模拟数据接口时，可选择请求方式 `任意` `GET` `POST` `PUT` `DELETE` `OPTIONS`。
+
+接口url应该以 `/` 开头，可填写具体url，也可以使用 `:param` 方式定义带参数的路由，参数名字不重要，但是必须要有，其作用类似于通配符，如
+
+ - /user/:id
+ - /user/:userid/info
+
+
 ## 语法
 
 本服务集成了 [mockjs](http://mockjs.com/) 与 [faker.js](http://marak.github.io/faker.js/) 语法
