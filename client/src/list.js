@@ -145,6 +145,7 @@ export default class ProjectList extends PureComponent{
 	constructor(props){
 		super();
 		this.state = {
+			searchKeyword: '',
 			apis: {},
 			modelData: {},
 			modelOpen: false
@@ -193,6 +194,20 @@ export default class ProjectList extends PureComponent{
 		const parse = key.split(' ')
 		window.open(parse[(parse.length - 1)])
 	}
+	searchFilter(apis){
+		const keyword = this.state.searchKeyword
+		if(keyword){
+			const apis = {}
+			Object.keys(this.state.apis).forEach(item => {
+				if(~item.indexOf(keyword)){
+					apis[item] = this.state.apis[item]
+				}
+			})
+			return apis;
+		} else {
+			return this.state.apis
+		}
+	}
 	render(){
 
 		return (
@@ -210,8 +225,13 @@ export default class ProjectList extends PureComponent{
 		      style={{borderBottom: '1px solid #eee'}}
 		    />
 		    <CardText>
+		    		<TextField
+		    			hintText="搜索" fullWidth
+		    			value={this.state.searchKeyword}
+		    			onChange={e => this.setState({searchKeyword: e.target.value})}
+		    		/>
 					<List>
-						{Object.keys(this.state.apis).map(item => {
+						{Object.keys(this.searchFilter(this.state.apis)).map(item => {
 							const api = this.state.apis[item]
 							return (
 								api && <ListItem 
