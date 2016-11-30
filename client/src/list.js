@@ -14,6 +14,8 @@ import api from './api';
 import CodeMirror from 'react-codemirror'
 import 'codemirror/mode/javascript/javascript'
 import 'codemirror/lib/codemirror.css'
+import 'codemirror/theme/monokai.css'
+import 'codemirror/keymap/sublime'
 
 class Model extends PureComponent{
 	constructor(props){
@@ -123,7 +125,8 @@ class Model extends PureComponent{
 					onChange={this.updateCode.bind(this)}
 					options={{
 						mode: 'javascript',
-						lineNumbers: true
+						lineNumbers: true,
+						theme: 'monokai'
 					}}
 				>
 				</CodeMirror>
