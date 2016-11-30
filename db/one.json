@@ -1,8 +1,0 @@
-{
-  "apis": {
-    "/example": {
-      "example": "@name"
-    }
-  },
-  "description": {}
-}
