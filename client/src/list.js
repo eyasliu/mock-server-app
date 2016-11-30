@@ -92,29 +92,31 @@ class Model extends PureComponent{
 				modal={false}
 				open={true}
 				onRequestClose={this.props.close}
-				autoScrollBodyContent={true}
-				bodyStyle={{marginTop: 10}}
 			>
-				<SelectField
-					floatingLabelText="请求方法"
-					value={this.state.method}
-					disabled={!!this.props.url}
-					onChange={(e, index, value) => this.setState({method: value})}
-				>
-					<MenuItem value="any" primaryText="任意" />
-					<MenuItem value="get" primaryText="GET" />
-					<MenuItem value="post" primaryText="POST" />
-					<MenuItem value="put" primaryText="PUT" />
-					<MenuItem value="delete" primaryText="DELETE" />
-					<MenuItem value="options" primaryText="OPTIONS" />
-				</SelectField>
-				<br />
-				<TextField
-					floatingLabelText="接口url"
-					defaultValue={this.state.path}
-					disabled={!!this.props.url}
-					onChange={e => this.setState({path: e.target.value})}
-				/>
+				<div>
+					<SelectField
+						floatingLabelText="请求方法"
+						value={this.state.method}
+						disabled={!!this.props.url}
+						onChange={(e, index, value) => this.setState({method: value})}
+						style={{float: 'left', width: '25%'}}
+					>
+						<MenuItem value="any" primaryText="任意" />
+						<MenuItem value="get" primaryText="GET" />
+						<MenuItem value="post" primaryText="POST" />
+						<MenuItem value="put" primaryText="PUT" />
+						<MenuItem value="delete" primaryText="DELETE" />
+						<MenuItem value="options" primaryText="OPTIONS" />
+					</SelectField>
+					<TextField
+						floatingLabelText="接口url"
+						defaultValue={this.state.path}
+						disabled={!!this.props.url}
+						onChange={e => this.setState({path: e.target.value})}
+						style={{width: '75%'}}
+					/>
+					
+				</div>
 				{/*<pre className="api-code">
 					{JSON.stringify(props.api, null, 4)}
 				</pre>*/}
@@ -214,7 +216,7 @@ export default class ProjectList extends PureComponent{
 			<Card>
 				<CardHeader
 		      title={<div>
-		      	<span style={{marginRight: 30}}>模拟接口列表</span>
+		      	<span style={{marginRight: 5}}>模拟接口列表</span>
 		      	<FlatButton onClick={this.addApi.bind(this)} label="添加新接口" primary />
 		      	<FlatButton 
 		      		href="https://github.com/eyasliu/mock-server-app#readme" 
