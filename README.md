@@ -15,7 +15,7 @@
 
  - 修改 config.json，指定域名与数据库
  - 新建数据库文件夹
- - 安装 forever: `npm i -f forever`
+ - 安装 forever: `npm i -g forever`
  - 启动： `forever start server.js`
 
 # 使用
