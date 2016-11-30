@@ -1,4 +1,5 @@
 import "regenerator-runtime/runtime";
+import fs from 'fs'
 import koa from 'koa'
 import logger from 'koa-logger'
 
@@ -10,12 +11,27 @@ import cors from './middleware/cors'
 import server from 'koa-static'
 import bodyparser from 'koa-bodyparser'
 
-import config from './config'
+// import config from './config'
 
 import path from 'path'
 
-const app = new koa()
+let config = {
+    "dbPath": "./db",
+    "domain": "mock.dev",
+    "port": 3000
+}
+let userConfig = {}
 
+if(fs.existsSync('./config.json')){
+    userConfig = JSON.parse(fs.readFileSync('./config.json'))
+}
+config = Object.assign({}, config, userConfig)
+
+const app = new koa()
+app.use(async (ctx, next) => {
+    ctx.appConfig = config;
+    await next()
+})
 app.use(logger())
 app.use(bodyparser())
 app.use(cors('http://portal.wps.cn'))

@@ -1,0 +1,5 @@
+{
+	"dbPath": "./db",
+	"domain": "mock.com",
+	"port": 3000
+}

@@ -2,7 +2,6 @@ import low from 'lowdb'
 import storage from 'lowdb/lib/file-async'
 import path from 'path'
 import _ from 'lodash'
-import config from '../config'
 
 const defaults = {
 	apis: {
@@ -23,8 +22,8 @@ export class DB {
 }
 
 export default basePath => async (context, next) => {
-	const {host} = context;
-	const dbName = ((host.substring(0, host.indexOf(config.domain) - 1)) || 'basic') + '.json'
+	const {host, appConfig} = context;
+	const dbName = ((host.substring(0, host.indexOf(appConfig.domain) - 1)) || 'basic') + '.json'
 	context.db = new DB(dbName, basePath)
 	await next()
 }
