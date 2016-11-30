@@ -33,12 +33,12 @@ app.use(async (ctx, next) => {
     await next()
 })
 app.use(logger())
+app.use(server('./client'))
 app.use(bodyparser())
 app.use(cors('http://portal.wps.cn'))
 app.use(db(path.join(process.cwd(), config.dbPath)))
 app.use(admin.routes())
 app.use(admin.allowedMethods())
-app.use(server('./client'))
 app.use(api)
 app.use(mock());
 
