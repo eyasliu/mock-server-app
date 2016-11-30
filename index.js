@@ -1,3 +1,4 @@
+import "regenerator-runtime/runtime";
 import koa from 'koa'
 import logger from 'koa-logger'
 

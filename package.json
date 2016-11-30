@@ -7,7 +7,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon --ignore client/ --exec \"babel-node\" index.js",
     "webpack": "webpack --watch",
-    "build": "cross-env NODE_ENV=production webpack"
+    "build:client": "cross-env APP_ENV=client NODE_ENV=production webpack",
+    "build:server": "cross-env APP_ENV=server NODE_ENV=production webpack",
+    "build": "npm run build:server && npm run build:client"
   },
   "repository": {
     "type": "git",
@@ -44,6 +46,7 @@
     "react-codemirror": "^0.3.0",
     "react-dom": "^15.4.1",
     "react-tap-event-plugin": "^2.0.1",
+    "regenerator-runtime": "^0.10.0",
     "style-loader": "^0.13.1",
     "webpack": "^1.13.3"
   },

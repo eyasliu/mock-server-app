@@ -1,14 +1,26 @@
 import webpack from 'webpack'
 import path from 'path'
+import fs from 'fs'
+
+const isServer = process.env.APP_ENV === 'server'
+
+const nodeModules = {};
+if(isServer){
+	fs.readdirSync('node_modules')
+	  .filter(x => ['.bin'].indexOf(x) === -1)
+	  .forEach(mod => nodeModules[mod] = 'commonjs ' + mod)
+}
 
 const config = {
 	entry: {
-		index: "./client/src/index.js"
+		[isServer ? 'server' : 'index']: isServer ? './index.js' : "./client/src/index.js"
 	},
+	target: isServer ? 'node' : 'web',
 	output: {
-		path: path.join(__dirname, './client/dest'),
+		path: path.join(__dirname, isServer ? './' : './client/dest'),
 		filename: '[name].js'
 	},
+	externals: nodeModules,
 	module: {
 		loaders: [
 			{
