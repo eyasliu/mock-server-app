@@ -36,10 +36,10 @@ __注意： 代码编辑器中只能写json格式数据__
 
 定义模拟数据接口时，可选择请求方式 `任意` `GET` `POST` `PUT` `DELETE` `OPTIONS`。
 
-接口url应该以 `/` 开头，可填写具体url，也可以使用 `:param` 方式定义带参数的路由，参数名字不重要，但是必须要有，其作用类似于通配符，如
+接口url应该以 `/` 开头，可填写具体url，也可以使用 `:param` 方式定义带参数的路由，如果使用参数路由，在数据定义中可以使用占位符 `@param(:param)` 获取参数
 
- - /user/:id
- - /user/:userid/info
+ - /user/:id => `@param(id)`
+ - /user/:userid/info => `@param(userid)`
 
 
 ## 语法

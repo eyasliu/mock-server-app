@@ -19,7 +19,9 @@ export default async (context, next) => {
 		_.find(allApis, (val, key) => {
 			let theUrl = key.split(' ').length > 1 ? key.split(' ')[1] : key.split(' ')[0];
 			const parser = new RouteParser(theUrl);
-			if(parser.match(url) && !content){
+			const params = parser.match(url)
+			if(params && !content){
+				context.routerParams = params
 				content = allApis[key]
 				return true
 			}

@@ -1,9 +1,14 @@
-import {mock} from 'mockjs'
+import {mock, Random} from 'mockjs'
 import faker from 'faker'
 
 faker.locale = "zh_CN"
 
-const parseMock = body => {
+const parseMock = (body, params) => {
+	Random.extend({
+		param: name => {
+			return params && params[name] ? params[name] : ''
+		}
+	})
 	let mockParse;
 	try {
 		let bodyObj = JSON.parse(body);
@@ -17,7 +22,8 @@ const parseMock = body => {
 
 export default () => async (context, next) => {
 	if(context.body){
-		context.body = parseMock(context.body)
+		console.log(context.routerParams)
+		context.body = parseMock(context.body, context.routerParams)
 	}
 	await next()
 }
