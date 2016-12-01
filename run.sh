@@ -1,10 +1,10 @@
-if [ `which forever` ]; then
-    echo "forever is ok!"
-else
+# check forever is exit
+if [[ ! -x $(which forever) ]]; then
+    echo "forever not exit"
     npm i -g forever
 fi
 
-if [ $1 == "stop" ]; then
+if [[ $1 == "stop" ]]; then
     forever stop server.js
 else
     echo "install production dependencies"
