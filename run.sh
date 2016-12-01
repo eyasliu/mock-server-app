@@ -1,3 +1,4 @@
+#!/bin/bash
 # check forever is exit
 if [[ ! -x $(which forever) ]]; then
     echo "forever not exit"
