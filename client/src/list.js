@@ -17,6 +17,12 @@ import 'codemirror/lib/codemirror.css'
 import 'codemirror/theme/monokai.css'
 import 'codemirror/keymap/sublime'
 
+const returnJson = (jsonstr, url) => {
+	const code = "(function(){return " + jsonstr + "})()"
+	const res = eval(code)
+	return typeof res === 'function' ? res() : res;
+}
+
 class Model extends PureComponent{
 	constructor(props){
 		super()
@@ -35,14 +41,24 @@ class Model extends PureComponent{
 		}
 	}
 	save(){
-		const url = (this.state.method == 'any' ? '' : this.state.method + ' ') + this.state.path
+		let url = this.state.method == 'any' ? '' : this.state.method + ' '
+		if(!this.state.path){
+			this.showMessage('URL不能为空')
+			return
+		}
+		if(!this.state.code){
+			this.showMessage('接口数据不能为空')
+			return
+		}
+		url += (this.state.path.indexOf('/') !== 0 ? '/' : '') + this.state.path
 		let code;
 		try{
-			code = JSON.parse(this.state.code)
+			code = returnJson(this.state.code)
 		} catch(e) {
 			this.showMessage('语法错误: ' + e.message)
 			return
 		}
+
 		api.saveApi(url, code).then(() => {
 			this.props.close()
 			this.props.saveApi(url, code)
@@ -128,7 +144,9 @@ class Model extends PureComponent{
 					options={{
 						mode: 'javascript',
 						lineNumbers: true,
-						theme: 'monokai'
+						theme: 'monokai',
+						indentUnit: 0,
+						keyMap: 'sublime',
 					}}
 				>
 				</CodeMirror>

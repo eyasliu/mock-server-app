@@ -22,7 +22,6 @@ const parseMock = (body, params) => {
 
 export default () => async (context, next) => {
 	if(context.body){
-		console.log(context.routerParams)
 		context.body = parseMock(context.body, context.routerParams)
 	}
 	await next()
