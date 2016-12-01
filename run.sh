@@ -15,4 +15,6 @@ else
     echo "starting service"
     forever start server.js
     echo "start service OK"
+    echo "Sync Qiniu CDN File"
+    node scripts/dest/updateQiniu.js
 fi

@@ -9,6 +9,7 @@
     "webpack": "webpack --watch",
     "build:client": "cross-env APP_ENV=client NODE_ENV=production webpack",
     "build:server": "cross-env APP_ENV=server NODE_ENV=production webpack",
+    "build:scripts": "babel scripts/ --out-dir scripts/dest --ignore scripts/dest/",
     "build": "npm run build:server && npm run build:client"
   },
   "repository": {
@@ -31,6 +32,7 @@
     "lodash": "^4.17.2",
     "lowdb": "^0.14.0",
     "mockjs": "^1.0.1-beta3",
+    "qiniu": "^6.1.13",
     "regenerator-runtime": "^0.10.0",
     "route-parser": "0.0.5"
   },
