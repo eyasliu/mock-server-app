@@ -16,3 +16,8 @@ body {
     padding: 5px;
     top: 8px !important;
 }
+.loading{
+    display: block;
+    text-align: center;
+    padding: 5em 0;
+}

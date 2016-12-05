@@ -7,6 +7,7 @@ import TextField from 'material-ui/TextField'
 import SelectField from 'material-ui/SelectField'
 import MenuItem from 'material-ui/MenuItem'
 import Snackbar from 'material-ui/Snackbar';
+import CircularProgress from 'material-ui/CircularProgress'
 
 import Dialog from 'material-ui/Dialog'
 
@@ -168,10 +169,11 @@ export default class ProjectList extends PureComponent{
 			searchKeyword: '',
 			apis: {},
 			modelData: {},
-			modelOpen: false
+			modelOpen: false,
+			isLoading: true
 		}
 		api.getApis().then(apis => {
-			this.setState({apis})
+			this.setState({apis, isLoading: false})
 		})
 	}
 
@@ -245,24 +247,24 @@ export default class ProjectList extends PureComponent{
 		      style={{borderBottom: '1px solid #eee'}}
 		    />
 		    <CardText>
-		    		<TextField
-		    			hintText="搜索" fullWidth
-		    			value={this.state.searchKeyword}
-		    			onChange={e => this.setState({searchKeyword: e.target.value})}
-		    		/>
-					<List>
-						{Object.keys(this.searchFilter(this.state.apis)).map(item => {
-							const api = this.state.apis[item]
-							return (
-								api && <ListItem 
-					      	primaryText={item} 
-					      	secondaryText={JSON.stringify(api)}
-					      	onClick={this.showDetail.bind(this, item, api)}
-					      	rightIcon={<i onClick={this.openApi.bind(this, item)} className="fa fa-link" title="访问接口"></i>}
-					      />
-				      )
-						})}
-			    </List>
+	    		<TextField
+	    			hintText="搜索" fullWidth
+	    			value={this.state.searchKeyword}
+	    			onChange={e => this.setState({searchKeyword: e.target.value})}
+	    		/>
+				{ !this.state.isLoading ? <List>
+					{Object.keys(this.searchFilter(this.state.apis)).map(item => {
+						const api = this.state.apis[item]
+						return (
+							api && <ListItem 
+				      	primaryText={item} 
+				      	secondaryText={JSON.stringify(api)}
+				      	onClick={this.showDetail.bind(this, item, api)}
+				      	rightIcon={<i onClick={this.openApi.bind(this, item)} className="fa fa-link" title="访问接口"></i>}
+				      />
+			      )
+					})}
+			    </List>: <div className="loading"><CircularProgress /></div>}
 			    {this.state.modelOpen && <Model {...this.state.modelData}/>}
 		    </CardText>
 			</Card>
