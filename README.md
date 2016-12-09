@@ -4,6 +4,8 @@
 
 ![](screenshot.png)
 
+__对应命令行工具：__ https://github.com/eyasliu/mock-server-cli
+
 # 安装并运行
 
 ### 自动安装
