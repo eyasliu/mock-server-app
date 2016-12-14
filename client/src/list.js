@@ -210,11 +210,19 @@ export default class ProjectList extends PureComponent{
 		newApis[url] = data
 		this.setState({apis: newApis})
 	}
+	preview(key){
+		const previewDomain = "http://eyasweb.com/mock-request/"
+		const parse = key.split(' ')
+		if(parse[1]){
+			return previewDomain + '?submit&path=' + location.origin + parse[1] + '&method=' + parse[0]
+		} else {
+			return previewDomain + '?submit&path=' + location.origin + parse[0]
+		}
+	}
 	openApi(key, e){
 		e.preventDefault();
 		e.stopPropagation();
-		const parse = key.split(' ')
-		window.open(parse[(parse.length - 1)])
+		window.open(this.preview(key))
 	}
 	searchFilter(apis){
 		const keyword = this.state.searchKeyword
